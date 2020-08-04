@@ -116,8 +116,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="putText.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="putText.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>

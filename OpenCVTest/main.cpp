@@ -1,5 +1,6 @@
 #include <iostream>
 #include <opencv2/opencv.hpp>
+#include "putText.h"
 
 #ifdef _DEBUG
 #pragma  comment(lib, "opencv_core341d.lib")
@@ -174,7 +175,16 @@ void test6()
 	imshow("Mat_", img);
 	waitKey(0);
 }
+//显示中文
+void test7()
+{
+	Mat m(300, 300, CV_8UC3);
 
+	putTextZH(m,"你好啊！",cv::Point(0,0),cv::Scalar(254,0,127),25);
+	imshow("Mat", m);
+	waitKey(0);
+
+}
 int main()
 {
 	printf("Hello, OpenCV!\n");
@@ -184,7 +194,8 @@ int main()
 	//test3();
 	//test4();
 	//test5();
-	test6();
+	//test6();
+	test7();
 
 	time_t end = clock();
 	printf("\r\n ##time: %d", end - start);
