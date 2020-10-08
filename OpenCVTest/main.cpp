@@ -1,20 +1,7 @@
 #include <iostream>
 #include <opencv2/opencv.hpp>
+#include <opencv2/imgproc/types_c.h>
 #include "putText.h"
-
-#ifdef _DEBUG
-#pragma  comment(lib, "opencv_core341d.lib")
-#pragma  comment(lib, "opencv_imgcodecs341d.lib")
-#pragma  comment(lib, "opencv_highgui341d.lib")
-#pragma  comment(lib, "opencv_imgproc341d.lib")
-#pragma  comment(lib, "opencv_calib3d341d.lib")
-#else
-#pragma  comment(lib, "opencv_core341.lib")
-#pragma  comment(lib, "opencv_imgcodecs341.lib")
-#pragma  comment(lib, "opencv_highgui341.lib")
-#pragma  comment(lib, "opencv_imgproc341.lib")
-#pragma  comment(lib, "opencv_calib3d341.lib")
-#endif
 
 using namespace cv;
 using namespace std;
@@ -48,8 +35,8 @@ void test2()
 	Mat img(3, 2, CV_8UC3);
 	randu(img, Scalar::all(0), Scalar::all(255));
 	cout << "img(default) = " << endl << " " << img << endl;
-	cout << "img(python) = " << endl  << cv::format(img, 3) << endl;
-	cout << "img(numpy) = " << endl << cv::format(img, 4) << endl;
+	cout << "img(python) = " << endl  << cv::format( img, Formatter::FMT_PYTHON) << endl;
+	cout << "img(numpy) = " << endl << cv::format(img, Formatter::FMT_NUMPY) << endl;
 	
 }
 //遍历Mat像素
@@ -151,9 +138,9 @@ void test5()
 	Mat d0 = img.diag(0);
 	Mat d1 = img.diag(1);
 	Mat d_1 = img.diag(-1);
-	cout << "d0:" << endl << format(d0, 4);
-	cout << "d1:" << endl << format(d1, 4);
-	cout << "d_1:" << endl << format(d_1, 4);
+	cout << "d0:" << endl << format(d0, Formatter::FMT_NUMPY);
+	cout << "d1:" << endl << format(d1, Formatter::FMT_NUMPY);
+	cout << "d_1:" << endl << format(d_1, Formatter::FMT_NUMPY);
 }
 //使用Mat_封装模板类型
 void test6()
