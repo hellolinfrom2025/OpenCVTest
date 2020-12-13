@@ -5,6 +5,33 @@
 
 using namespace cv;
 using namespace std;
+using namespace chrono;
+
+static vector< cv::Point> _getPtsByLine(cv::Point pt1, cv::Point pt2, int div)
+{
+	vector< cv::Point> vecPtRet;
+	if (pt1 == pt2) {
+		return vecPtRet;
+	}
+	double distance_percentage = 1.0 / div;
+	double gap_x = pt2.x - pt1.x;
+	double gap_y = pt2.y - pt1.y;
+	for (int ii = 1; ii < div; ii++) {
+		cv::Point ptNew;
+		ptNew.x = pt1.x + gap_x * distance_percentage*ii;
+		ptNew.y = pt1.y + gap_y * distance_percentage*ii;
+		vecPtRet.push_back(ptNew);
+	}
+	return vecPtRet;
+}
+
+template <typename T>
+static void _vectorAdd(const vector<T>&src, vector<T>&des)
+{
+	for (const auto &val : src) {
+		des.push_back(val);
+	}
+}
 //图片与Mat的转换，输入与输出
 void test1() 
 {
@@ -172,20 +199,51 @@ void test7()
 	waitKey(0);
 
 }
+
+void test8()
+{
+	cv::Rect rc(100, 100, 100, 100);
+	vector<cv::Point> vecCvPt;
+	cv::Point ptTl = rc.tl();
+	cv::Point ptTr = rc.tl() + cv::Point(rc.width, 0);
+	cv::Point ptBr = rc.br();
+	cv::Point ptBl = rc.tl() + cv::Point(0, rc.height);
+	_vectorAdd<cv::Point>(_getPtsByLine(ptTl, ptTr, 5), vecCvPt);
+	_vectorAdd<cv::Point>(_getPtsByLine(ptTl, ptBl, 5), vecCvPt);
+	_vectorAdd<cv::Point>(_getPtsByLine(ptBr, ptBl, 5), vecCvPt);
+	_vectorAdd<cv::Point>(_getPtsByLine(ptBr, ptTr, 5), vecCvPt);
+	int nOffsetX = rc.width / 10;
+	int nOffsetY = rc.height / 10;
+	_vectorAdd<cv::Point>(_getPtsByLine(ptTl, cv::Point(ptTl.x + nOffsetX, ptTl.y), 5), vecCvPt);
+	_vectorAdd<cv::Point>(_getPtsByLine(ptTl, cv::Point(ptTl.x, ptTl.y + nOffsetY), 5), vecCvPt);
+	_vectorAdd<cv::Point>(_getPtsByLine(ptTr, cv::Point(ptTr.x - nOffsetX, ptTr.y), 5), vecCvPt);
+	_vectorAdd<cv::Point>(_getPtsByLine(ptTr, cv::Point(ptTr.x, ptTr.y + nOffsetY), 5), vecCvPt);
+	_vectorAdd<cv::Point>(_getPtsByLine(ptBl, cv::Point(ptBl.x + nOffsetX, ptBl.y), 5), vecCvPt);
+	_vectorAdd<cv::Point>(_getPtsByLine(ptBl, cv::Point(ptBl.x, ptBl.y - nOffsetY), 5), vecCvPt);
+	_vectorAdd<cv::Point>(_getPtsByLine(ptBr, cv::Point(ptBr.x - nOffsetX, ptBr.y), 5), vecCvPt);
+	_vectorAdd<cv::Point>(_getPtsByLine(ptBr, cv::Point(ptBr.x, ptBr.y - nOffsetY), 5), vecCvPt);
+
+
+
+}
 int main()
 {
 	printf("Hello, OpenCV!\n");
-	time_t start = clock();
+	auto begin = system_clock::now();
 	//test1();
 	//test2();
 	//test3();
 	//test4();
 	//test5();
 	//test6();
-	test7();
+	//test7();
+	for (int ii = 0; ii < 100000;ii++) {
+		test8();
+	}
 
-	time_t end = clock();
-	printf("\r\n ##time: %d", end - start);
+	auto end = system_clock::now();
+	auto elapsedTime =duration_cast<std::chrono::milliseconds>(end - begin);
+	printf("\r\n ##time: %d",elapsedTime.count());
 	system("pause");
 	return 0;
 }
